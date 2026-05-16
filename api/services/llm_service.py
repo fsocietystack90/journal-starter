@@ -72,15 +72,22 @@ async def analyze_journal_entry(
         messages=[
             {
                 "role": "system",
-                "content": "You are a journal entry analyzer. Analyze the journal entry and respond in json only.",
+                "content": (
+                    "You are a journal entry analyzer. "
+                    "Analyze the journal entry and respond ONLY with a JSON object containing exactly these fields: "
+                    "sentiment (must be 'positive', 'negative', or 'neutral'), "
+                    "summary (2 sentence summary), "
+                    "topics (list of 2-4 strings). "
+                    "Do not wrap in markdown. Do not include any other fields or text."
+                ),
             },
             {"role": "user", "content": entry_text},
         ],
         model=get_settings().openai_model,
     )
+
     ai_reply = response.choices[0].message.content or ""
     results = json.loads(ai_reply)
-
     return {
         "entry_id": entry_id,
         "sentiment": results["sentiment"],
