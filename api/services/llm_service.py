@@ -13,6 +13,7 @@ in your .env file. Settings are loaded by ``api.config.Settings``.
 """
 
 import json
+from datetime import UTC, datetime
 
 from openai import AsyncOpenAI
 
@@ -85,4 +86,5 @@ async def analyze_journal_entry(
         "sentiment": results["sentiment"],
         "summary": results["summary"],
         "topics": results["topics"],
+        "created_at": datetime.now(UTC),
     }
